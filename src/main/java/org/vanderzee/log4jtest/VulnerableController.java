@@ -13,17 +13,17 @@ import java.io.InputStream;
 public class VulnerableController {
     private static final Logger logger = LogManager.getLogger(VulnerableController.class);
 
-    @GetMapping("/")
+    @GetMapping("/vulnerable")
     public String index(@RequestHeader("X-MyHeader") String myHeader) {
         logger.info("index: Received a request with a header: '{}'", myHeader);
 
         return "Hello, world!";
     }
 
-    @GetMapping("/code")
+    @GetMapping("/exploit/Exploit.class")
     public byte[] code() throws IOException {
         logger.info("code");
-        InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("Exploit.class");
+        InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("exploit/Exploit.class");
         return resourceAsStream.readAllBytes();
     }
 }
