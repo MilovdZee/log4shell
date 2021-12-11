@@ -34,7 +34,7 @@ public class Application {
 
     public static void main(String[] args) {
         // open up the remote class loading for newer versions of java
-        System.setProperty("com.sun.jndi.ldap.object.trustURLCodebase","true");
+        System.setProperty("com.sun.jndi.ldap.object.trustURLCodebase", "true");
 
         SpringApplication.run(Application.class, args);
     }
@@ -78,7 +78,7 @@ public class Application {
                     base, JAVA_CODE_BASE, JAVA_FACTORY, JAVA_CLASS_NAME);
 
             entry.addAttribute("javaClassName", JAVA_CLASS_NAME);
-            entry.addAttribute("javaCodeBase", JAVA_CODE_BASE);
+            entry.addAttribute("javaCodeBase", JAVA_CODE_BASE + "?base=" + base);
             entry.addAttribute("objectClass", OBJECT_CLASS);
             entry.addAttribute("javaFactory", JAVA_FACTORY);
 
