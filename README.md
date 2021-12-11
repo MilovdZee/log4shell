@@ -2,6 +2,12 @@
 
 This is a proof of concept for the Log4Shell bug.
 
+## Info
+* - https://github.com/mbechler/marshalsec
+* - https://github.com/tangxiaofeng7/CVE-2021-44228-Apache-Log4j-Rce
+* - https://www.lunasec.io/docs/blog/log4j-zero-day/
+
+## Explanation
 The exploit is in the class `Exploit.java` and should be compiled to `Exploit.class` and stored in the `resources/exploit` folder of main.
 
 Before you do this make sure that the class `Exploit.java` is in the root folder of `src/main/java` and not under a package. To make sure the exploit 

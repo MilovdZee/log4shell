@@ -20,12 +20,6 @@ import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 import java.net.InetAddress;
 
-/*
- * See:
- * - https://github.com/mbechler/marshalsec
- * - https://github.com/tangxiaofeng7/CVE-2021-44228-Apache-Log4j-Rce
- */
-
 @SpringBootApplication
 public class Application {
     private static final Logger logger = LogManager.getLogger(Application.class);
