@@ -3,9 +3,10 @@
 This is a proof of concept for the Log4Shell bug.
 
 ## Info
-* - https://github.com/mbechler/marshalsec
-* - https://github.com/tangxiaofeng7/CVE-2021-44228-Apache-Log4j-Rce
-* - https://www.lunasec.io/docs/blog/log4j-zero-day/
+- https://github.com/mbechler/marshalsec
+- https://github.com/tangxiaofeng7/CVE-2021-44228-Apache-Log4j-Rce
+- https://www.lunasec.io/docs/blog/log4j-zero-day/
+- https://log4shell.huntress.com/
 
 ## Use as tester
 Because the application logs the LDAP path this implementation can be used in combination with scanning alle your service endpoints. Just use a different
