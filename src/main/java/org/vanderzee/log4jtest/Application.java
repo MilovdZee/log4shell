@@ -39,7 +39,9 @@ public class Application {
     private static final String JAVA_CLASS_NAME = "foo";
 
     public static void main(String[] args) {
-        //System.setProperty("com.sun.jndi.ldap.object.trustURLCodebase","true");
+        // open up the remote class loading for newer versions of java
+        System.setProperty("com.sun.jndi.ldap.object.trustURLCodebase","true");
+
         SpringApplication.run(Application.class, args);
     }
 
