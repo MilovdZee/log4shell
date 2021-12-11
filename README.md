@@ -16,10 +16,8 @@ only way to be sure that the classloader won't be able to find it under the name
 
 The script requests a ldap JNDI lookup at http://localhost:12345/code. This returns the binary of the `Exploit.class` file.
 
-### So the steps are (On Linux)
-- run `javac Exploit.java -d /tmp`
-- run `mvn clean install`
-- java -jar target/log4jtest*.jar
+### So the things to start are (On Linux, in separate terminals)
+- scripts/start.sh
 - tail -f /tmp/test.out
 - scripts/testVulnerableApp.sh
 
