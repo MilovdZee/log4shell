@@ -3,6 +3,7 @@ package org.vanderzee.log4jtest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,9 +22,9 @@ public class VulnerableController {
         return "Hello, world!";
     }
 
-    @GetMapping("/code/Exploit.class")
-    public byte[] code() throws IOException {
-        logger.info("code");
+    @GetMapping("/code/{base}/Exploit.class")
+    public byte[] code(@PathVariable("base") String base) throws IOException {
+        logger.info("code: base={}", base);
         try (InputStream stream = new FileInputStream("/tmp/Exploit.class")) {
             return stream.readAllBytes();
         }
