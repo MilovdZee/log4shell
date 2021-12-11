@@ -19,4 +19,5 @@ The script requests a ldap JNDI lookup at http://localhost:12345/code. This retu
 
 ### Extra test
 It is also possible to use a python server to serve the Exploit.class file
-Start `python -m http.server 8888` in the folder where the Exploit.class file is. 
+Start `python -m http.server 8888` in `/tmp`. 
+You will also have to update `Application.java` variable `JAVA_CODE_BASE` to point to this server.
