@@ -1,4 +1,4 @@
-# log4jtest
+# log4shell
 
 This is a proof of concept for the Log4Shell bug.
 
