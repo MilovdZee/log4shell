@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -23,7 +24,8 @@ public class VulnerableController {
     @GetMapping("/code/Exploit.class")
     public byte[] code() throws IOException {
         logger.info("code");
-        InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("exploit/Exploit.class");
-        return resourceAsStream.readAllBytes();
+        try (InputStream stream = new FileInputStream("/tmp/Exploit.class")) {
+            return stream.readAllBytes();
+        }
     }
 }
