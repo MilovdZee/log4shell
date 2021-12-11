@@ -20,7 +20,7 @@ public class VulnerableController {
         return "Hello, world!";
     }
 
-    @GetMapping("/exploit/Exploit.class")
+    @GetMapping("/code/Exploit.class")
     public byte[] code() throws IOException {
         logger.info("code");
         InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("exploit/Exploit.class");
