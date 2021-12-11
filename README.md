@@ -7,6 +7,10 @@ This is a proof of concept for the Log4Shell bug.
 * - https://github.com/tangxiaofeng7/CVE-2021-44228-Apache-Log4j-Rce
 * - https://www.lunasec.io/docs/blog/log4j-zero-day/
 
+## Use as tester
+Because the application logs the LDAP path this implementation can be used in combination with scanning alle your service endpoints. Just use a different
+path for each endpoint under test and then it is very easy to find which service is vulnerable.
+
 ## Explanation
 The exploit is in the class `Exploit.java` and should be compiled to `Exploit.class` and stored in the `resources/exploit` folder of main.
 
