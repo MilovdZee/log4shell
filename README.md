@@ -11,11 +11,8 @@ only way to be sure that the classloader won't be able to find it under the name
 The script requests a ldap JNDI lookup at http://localhost:12345/code. This returns the binary of the `Exploit.class` file.
 
 ### So the steps are (On Linux)
-- move Exploit.java to `src/main/java`
+- run `javac Exploit.java -d /tmp`
 - run `mvn clean install`
-- move the target class of `Exploit.class` from `target/classes` to `/tmp`
-- move Exploit.java back to the root of this repo
-- run `mvn clean install` again to generate a jar without the Exploit class in it
 - java -jar target/log4jtest*.jar
 - tail -f /tmp/test.out
 - scripts/testVulnerableApp.sh
