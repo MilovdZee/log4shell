@@ -9,7 +9,7 @@ is testing a valid path I moved this class to a `hidden` folder.
 
 The script requests a ldap JNDI lookup at http://localhost:12345/code. This returns the binary of the `Exploit.class` file.
 
-So the steps are (On Linux):
+### So the steps are (On Linux)
 - move Exploit.java a folder up
 - mvn clean install
 - move the target class of `Exploit.class` from `target/classes` to `src/main/resources/exploit`
