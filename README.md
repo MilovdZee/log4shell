@@ -7,6 +7,8 @@ This is a proof of concept for the Log4Shell bug.
 - https://github.com/tangxiaofeng7/CVE-2021-44228-Apache-Log4j-Rce
 - https://www.lunasec.io/docs/blog/log4j-zero-day/
 - https://log4shell.huntress.com/
+- https://www.veracode.com/blog/research/exploiting-jndi-injections-java
+- https://github.com/veracode-research/rogue-jndi
 
 ## Use as tester
 Because the application logs the LDAP path this implementation can be used in combination with scanning all your service endpoints. Just use a different

